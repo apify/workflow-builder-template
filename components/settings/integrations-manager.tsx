@@ -26,6 +26,7 @@ const INTEGRATION_TYPE_LABELS: Record<IntegrationType, string> = {
   database: "Database",
   "ai-gateway": "AI Gateway",
   firecrawl: "Firecrawl",
+  apify: "Apify",
 };
 
 type IntegrationsManagerProps = {
