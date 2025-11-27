@@ -706,15 +706,18 @@ function RunActorFields({
       </div>
       <div className="flex items-center space-x-2">
         <input
-          type="checkbox"
+          checked={(config?.waitForFinish as boolean) !== false}
+          className="h-4 w-4 rounded border-input"
           disabled={disabled}
           id="waitForFinish"
-          checked={(config?.waitForFinish as boolean) !== false}
           onChange={(e) => onUpdateConfig("waitForFinish", e.target.checked ? "true" : "false")}
-          className="h-4 w-4 rounded border-input"
+          type="checkbox"
         />
         <div className="grid gap-1.5 leading-none">
-          <Label htmlFor="waitForFinish" className="text-sm font-medium cursor-pointer">
+          <Label
+            className="text-sm font-medium cursor-pointer"
+            htmlFor="waitForFinish"
+          >
             Wait for results
           </Label>
           <p className="text-muted-foreground text-xs">

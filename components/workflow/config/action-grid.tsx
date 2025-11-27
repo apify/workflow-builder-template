@@ -24,7 +24,13 @@ type ActionType = {
   description: string;
   category: string;
   icon: React.ComponentType<{ className?: string }>;
-  integration?: "linear" | "resend" | "slack" | "vercel" | "firecrawl" | "apify";
+  integration?:
+    | "linear"
+    | "resend"
+    | "slack"
+    | "vercel"
+    | "firecrawl"
+    | "apify";
 };
 
 const actions: ActionType[] = [
