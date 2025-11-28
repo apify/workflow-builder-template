@@ -2,6 +2,7 @@ import { LinearClient } from "@linear/sdk";
 import FirecrawlApp from "@mendable/firecrawl-js";
 import { WebClient } from "@slack/web-api";
 import { createGateway } from "ai";
+import { ApifyClient } from "apify-client";
 import { NextResponse } from "next/server";
 import postgres from "postgres";
 import { Resend } from "resend";
@@ -296,22 +297,10 @@ async function testApifyConnection(
       };
     }
 
-    // Test by fetching user info from Apify API
-    const response = await fetch("https://api.apify.com/v2/users/me", {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
+    const client = new ApifyClient({ token: apiKey });
+    const user = await client.user("me").get();
 
-    if (!response.ok) {
-      return {
-        status: "error",
-        message: "Invalid API token",
-      };
-    }
-
-    const data = await response.json();
-    if (!data.data?.username) {
+    if (!user.username) {
       return {
         status: "error",
         message: "Failed to verify API token",
@@ -320,7 +309,7 @@ async function testApifyConnection(
 
     return {
       status: "success",
-      message: `Connected as ${data.data.username}`,
+      message: `Connected as ${user.username}`,
     };
   } catch (error) {
     return {

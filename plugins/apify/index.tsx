@@ -1,10 +1,12 @@
-import { Play } from "lucide-react";
+import { Globe } from "lucide-react";
 import type { IntegrationPlugin } from "../registry";
 import { registerIntegration } from "../registry";
 import { runActorCodegenTemplate } from "./codegen/run-actor";
+import { scrapeSingleUrlCodegenTemplate } from "./codegen/scrape-single-url";
 import { ApifyIcon } from "./icon";
 import { ApifySettings } from "./settings";
 import { RunActorConfigFields } from "./steps/run-actor/config";
+import { ScrapeSingleUrlConfigFields } from "./steps/scrape-single-url/config";
 import { testApify } from "./test";
 
 const apifyPlugin: IntegrationPlugin = {
@@ -13,9 +15,8 @@ const apifyPlugin: IntegrationPlugin = {
   description: "Run web scraping and automation Actors",
 
   icon: {
-    type: "svg",
-    value: "ApifyIcon",
-    svgComponent: ApifyIcon,
+    type: "image",
+    value: "/integrations/apify.svg",
   },
 
   settingsComponent: ApifySettings,
@@ -49,15 +50,26 @@ const apifyPlugin: IntegrationPlugin = {
 
   actions: [
     {
-      id: "Run Actor",
-      label: "Run Actor",
+      id: "Run Apify Actor",
+      label: "Run Apify Actor",
       description: "Run an Apify Actor and get results",
       category: "Apify",
-      icon: Play,
+      icon: ApifyIcon,
       stepFunction: "apifyRunActorStep",
       stepImportPath: "run-actor",
       configFields: RunActorConfigFields,
       codegenTemplate: runActorCodegenTemplate,
+    },
+    {
+      id: "Scrape Single URL",
+      label: "Scrape Single URL",
+      description: "Scrape a single URL and get markdown output",
+      category: "Apify",
+      icon: Globe,
+      stepFunction: "scrapeSingleUrlStep",
+      stepImportPath: "scrape-single-url",
+      configFields: ScrapeSingleUrlConfigFields,
+      codegenTemplate: scrapeSingleUrlCodegenTemplate,
     },
   ],
 };

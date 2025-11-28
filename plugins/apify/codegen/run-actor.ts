@@ -1,53 +1,39 @@
 /**
- * Code generation template for Apify Run Actor action
+ * Code generation template for Run Apify Actor action
  * This template is used when exporting workflows to standalone Next.js projects
  * It uses environment variables instead of integrationId
  */
-export const runActorCodegenTemplate = `const APIFY_API_BASE = "https://api.apify.com/v2";
+export const runActorCodegenTemplate = `import { ApifyClient } from "apify-client";
 
 export async function apifyRunActorStep(input: {
   actorId: string;
   actorInput?: Record<string, unknown>;
-  waitForFinish?: boolean;
-  maxWaitSecs?: number;
 }) {
   "use step";
 
   const apiKey = process.env.APIFY_API_KEY!;
-  const waitForFinish = input.waitForFinish !== false;
-  const maxWaitSecs = input.maxWaitSecs || 120;
+  const client = new ApifyClient({ token: apiKey });
+  const actorClient = client.actor(input.actorId);
+  const maxWaitSecs = 120;
 
-  const runUrl = waitForFinish
-    ? \`\${APIFY_API_BASE}/acts/\${encodeURIComponent(input.actorId)}/run-sync-get-dataset-items?timeout=\${maxWaitSecs}\`
-    : \`\${APIFY_API_BASE}/acts/\${encodeURIComponent(input.actorId)}/runs\`;
+    // Run synchronously and wait for completion
+    const runData = await actorClient.call(input.actorInput || {}, {
+      waitSecs: maxWaitSecs,
+    });
 
-  const runResponse = await fetch(runUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: \`Bearer \${apiKey}\`,
-    },
-    body: JSON.stringify(input.actorInput || {}),
-  });
+    // Get dataset items
+    let data: unknown[] = [];
+    if (runData.defaultDatasetId) {
+      const datasetItems = await client
+        .dataset(runData.defaultDatasetId)
+        .listItems();
+      data = datasetItems.items;
+    }
 
-  if (!runResponse.ok) {
-    const errorText = await runResponse.text().catch(() => "Unknown error");
-    throw new Error(\`Failed to run Actor: \${runResponse.status} - \${errorText}\`);
-  }
-
-  if (waitForFinish) {
-    const data = await runResponse.json();
     return {
-      runId: runResponse.headers.get("x-apify-run-id") || "unknown",
-      status: "SUCCEEDED",
-      data: Array.isArray(data) ? data : [data],
+      runId: runData.id || "unknown",
+      status: runData.status || "SUCCEEDED",
+      datasetId: runData.defaultDatasetId,
+      data,
     };
-  }
-
-  const runData = await runResponse.json();
-  return {
-    runId: runData.data?.id || "unknown",
-    status: runData.data?.status || "RUNNING",
-    datasetId: runData.data?.defaultDatasetId,
-  };
 }`;

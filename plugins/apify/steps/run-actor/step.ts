@@ -1,9 +1,8 @@
 import "server-only";
 
+import { ApifyClient } from "apify-client";
 import { fetchCredentials } from "@/lib/credential-fetcher";
 import { getErrorMessage } from "@/lib/utils";
-
-const APIFY_API_BASE = "https://api.apify.com/v2";
 
 type ApifyRunActorResult =
   | {
@@ -16,15 +15,13 @@ type ApifyRunActorResult =
   | { success: false; error: string };
 
 /**
- * Apify Run Actor Step
+ * Run Apify Actor Step
  * Runs an Apify Actor and optionally waits for results
  */
 export async function apifyRunActorStep(input: {
   integrationId?: string;
   actorId: string;
   actorInput?: Record<string, unknown>;
-  waitForFinish?: boolean;
-  maxWaitSecs?: number;
 }): Promise<ApifyRunActorResult> {
   "use step";
 
@@ -42,50 +39,31 @@ export async function apifyRunActorStep(input: {
   }
 
   try {
-    const waitForFinish = input.waitForFinish !== false;
-    const maxWaitSecs = input.maxWaitSecs || 120;
+    const client = new ApifyClient({ token: apiKey });
+    const actorClient = client.actor(input.actorId);
+    const maxWaitSecs = 120;
 
-    // Start the Actor run
-    const runUrl = waitForFinish
-      ? `${APIFY_API_BASE}/acts/${encodeURIComponent(input.actorId)}/run-sync-get-dataset-items?timeout=${maxWaitSecs}`
-      : `${APIFY_API_BASE}/acts/${encodeURIComponent(input.actorId)}/runs`;
+      // Run synchronously and wait for completion
+      const runData = await actorClient.call(input.actorInput || {}, {
+          waitSecs: maxWaitSecs,
+      });
 
-    const runResponse = await fetch(runUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(input.actorInput || {}),
-    });
+      // Get dataset items
+      let data: unknown[] = [];
+      if (runData.defaultDatasetId) {
+          const datasetItems = await client
+              .dataset(runData.defaultDatasetId)
+              .listItems();
+          data = datasetItems.items;
+      }
 
-    if (!runResponse.ok) {
-      const errorText = await runResponse.text().catch(() => "Unknown error");
       return {
-        success: false,
-        error: `Failed to run Actor: ${runResponse.status} - ${errorText}`,
+          success: true,
+          runId: runData.id || "unknown",
+          status: runData.status || "SUCCEEDED",
+          datasetId: runData.defaultDatasetId,
+          data,
       };
-    }
-
-    if (waitForFinish) {
-      // For sync runs, we get the dataset items directly
-      const data = await runResponse.json();
-      return {
-        success: true,
-        runId: runResponse.headers.get("x-apify-run-id") || "unknown",
-        status: "SUCCEEDED",
-        data: Array.isArray(data) ? data : [data],
-      };
-    }
-
-    // For async runs, we get the run info
-    const runData = await runResponse.json();
-    return {
-      success: true,
-      runId: runData.data?.id || "unknown",
-      status: runData.data?.status || "RUNNING",
-      datasetId: runData.data?.defaultDatasetId,
-    };
   } catch (error) {
     return {
       success: false,

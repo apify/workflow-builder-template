@@ -20,6 +20,7 @@ import {
   currentWorkflowIdAtom,
   currentWorkflowNameAtom,
 } from "@/lib/workflow-store";
+import { ScrapeSingleUrlConfigFields } from "@/plugins/apify/steps/scrape-single-url/config";
 import { SchemaBuilder, type SchemaField } from "./schema-builder";
 
 type ActionConfigProps = {
@@ -650,7 +651,7 @@ function SearchFields({
   );
 }
 
-// Run Actor fields component (Apify)
+// Run Apify Actor fields component (Apify)
 function RunActorFields({
   config,
   onUpdateConfig,
@@ -704,29 +705,6 @@ function RunActorFields({
           fields.
         </p>
       </div>
-      <div className="flex items-center space-x-2">
-        <input
-          checked={(config?.waitForFinish as boolean) !== false}
-          className="h-4 w-4 rounded border-input"
-          disabled={disabled}
-          id="waitForFinish"
-          onChange={(e) =>
-            onUpdateConfig("waitForFinish", e.target.checked ? "true" : "false")
-          }
-          type="checkbox"
-        />
-        <div className="grid gap-1.5 leading-none">
-          <Label
-            className="cursor-pointer font-medium text-sm"
-            htmlFor="waitForFinish"
-          >
-            Wait for results
-          </Label>
-          <p className="text-muted-foreground text-xs">
-            Wait for the Actor to finish and return dataset items
-          </p>
-        </div>
-      </div>
     </>
   );
 }
@@ -735,7 +713,7 @@ function RunActorFields({
 const ACTION_CATEGORIES = {
   System: ["HTTP Request", "Database Query", "Condition"],
   "AI Gateway": ["Generate Text", "Generate Image"],
-  Apify: ["Run Actor"],
+  Apify: ["Run Apify Actor", "Scrape Single URL"],
   Firecrawl: ["Scrape", "Search"],
   Linear: ["Create Ticket", "Find Issues"],
   Resend: ["Send Email"],
@@ -973,12 +951,21 @@ export function ActionConfig({
         />
       )}
 
-      {/* Run Actor fields (Apify) */}
-      {config?.actionType === "Run Actor" && (
+      {/* Run Apify Actor fields (Apify) */}
+      {config?.actionType === "Run Apify Actor" && (
         <RunActorFields
           config={config}
           disabled={disabled}
           onUpdateConfig={onUpdateConfig}
+        />
+      )}
+
+      {/* Scrape Single URL fields (Apify) */}
+      {config?.actionType === "Scrape Single URL" && (
+        <ScrapeSingleUrlConfigFields
+          config={config}
+          disabled={disabled}
+          onUpdateConfig={(key, value) => onUpdateConfig(key, String(value))}
         />
       )}
     </>

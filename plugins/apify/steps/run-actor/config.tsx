@@ -3,7 +3,7 @@ import { TemplateBadgeInput } from "@/components/ui/template-badge-input";
 import { TemplateBadgeTextarea } from "@/components/ui/template-badge-textarea";
 
 /**
- * Run Actor Config Fields Component
+ * Run Apify Actor Config Fields Component
  * UI for configuring the run actor action
  */
 export function RunActorConfigFields({
@@ -60,25 +60,6 @@ export function RunActorConfigFields({
           JSON input for the Actor. Check the Actor's documentation for required
           fields.
         </p>
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          disabled={disabled}
-          id="waitForFinish"
-          checked={(config?.waitForFinish as boolean) !== false}
-          onChange={(e) => onUpdateConfig("waitForFinish", e.target.checked)}
-          className="h-4 w-4 rounded border-input"
-        />
-        <div className="grid gap-1.5 leading-none">
-          <Label htmlFor="waitForFinish" className="text-sm font-medium cursor-pointer">
-            Wait for results
-          </Label>
-          <p className="text-muted-foreground text-xs">
-            Wait for the Actor to finish and return dataset items
-          </p>
-        </div>
       </div>
     </div>
   );

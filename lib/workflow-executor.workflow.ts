@@ -212,27 +212,37 @@ async function executeActionStep(input: {
     return await firecrawlSearchStep(stepInput as any);
   }
 
-  if (actionType === "Run Actor") {
+  if (actionType === "Run Apify Actor") {
     const { apifyRunActorStep } = await import(
       "../plugins/apify/steps/run-actor/step"
     );
-    // Parse actorInput if it's a JSON string and convert waitForFinish to boolean
     const runActorInput = { ...stepInput };
     if (typeof runActorInput.actorInput === "string") {
       try {
         runActorInput.actorInput = JSON.parse(runActorInput.actorInput);
       } catch {
         // If JSON parsing fails, keep the original string
-        console.warn("[Run Actor] Failed to parse actorInput as JSON");
+        console.warn("[Run Apify Actor] Failed to parse actorInput as JSON");
       }
     }
-    // Convert waitForFinish string to boolean (checkbox saves as "true"/"false" strings)
-    if (typeof runActorInput.waitForFinish === "string") {
-      runActorInput.waitForFinish = runActorInput.waitForFinish === "true";
-    }
-    console.log("[Run Actor] Input:", JSON.stringify(runActorInput, null, 2));
+    console.log(
+      "[Run Apify Actor] Input:",
+      JSON.stringify(runActorInput, null, 2)
+    );
     // biome-ignore lint/suspicious/noExplicitAny: Dynamic step input type
     return await apifyRunActorStep(runActorInput as any);
+  }
+
+  if (actionType === "Scrape Single URL") {
+    const { scrapeSingleUrlStep } = await import(
+      "../plugins/apify/steps/scrape-single-url/step"
+    );
+    console.log(
+      "[Scrape Single URL] Input:",
+      JSON.stringify(stepInput, null, 2)
+    );
+    // biome-ignore lint/suspicious/noExplicitAny: Dynamic step input type
+    return await scrapeSingleUrlStep(stepInput as any);
   }
 
   // Fallback for unknown action types

@@ -79,7 +79,8 @@ const getIntegrationFromActionType = (actionType: string): string => {
     Scrape: "Firecrawl",
     Search: "Firecrawl",
     Condition: "Condition",
-    "Run Actor": "Apify",
+    "Run Apify Actor": "Apify",
+    "Scrape Single URL": "Apify",
   };
   return integrationMap[actionType] || "System";
 };
@@ -136,6 +137,9 @@ const getProviderLogo = (actionType: string) => {
     case "Scrape":
     case "Search":
       return <IntegrationIcon className="size-12" integration="firecrawl" />;
+    case "Run Apify Actor":
+    case "Scrape Single URL":
+      return <IntegrationIcon className="size-12" integration="apify" />;
     case "Execute Code":
       return <Code className="size-12 text-green-300" strokeWidth={1.5} />;
     case "Condition":

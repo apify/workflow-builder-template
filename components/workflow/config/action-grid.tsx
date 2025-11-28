@@ -5,7 +5,6 @@ import {
   Flame,
   Mail,
   MessageSquare,
-  Play,
   Search,
   Settings,
   Sparkles,
@@ -17,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { IntegrationIcon } from "@/components/ui/integration-icon";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { ApifyIcon } from "../../../plugins/apify/icon";
 
 type ActionType = {
   id: string;
@@ -120,11 +120,19 @@ const actions: ActionType[] = [
     integration: "firecrawl",
   },
   {
-    id: "Run Actor",
-    label: "Run Actor",
+    id: "Run Apify Actor",
+    label: "Run Apify Actor",
     description: "Run an Apify Actor",
     category: "Apify",
-    icon: Play,
+    icon: ApifyIcon,
+    integration: "apify",
+  },
+  {
+    id: "Scrape Single URL",
+    label: "Scrape Single URL",
+    description: "Scrape a single URL and get markdown",
+    category: "Apify",
+    icon: ApifyIcon,
     integration: "apify",
   },
 ];
