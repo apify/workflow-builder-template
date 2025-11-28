@@ -664,7 +664,7 @@ function RunActorFields({
   return (
     <>
       <div className="space-y-2">
-        <Label htmlFor="actorId">Actor ID or Name</Label>
+        <Label htmlFor="actorId">Actor (ID or name)</Label>
         <TemplateBadgeInput
           disabled={disabled}
           id="actorId"
@@ -682,23 +682,10 @@ function RunActorFields({
         <TemplateBadgeTextarea
           disabled={disabled}
           id="actorInput"
-          onChange={(value) => {
-            try {
-              JSON.parse(value);
-              onUpdateConfig("actorInput", value);
-            } catch {
-              // Store as string if not valid JSON yet (user is still typing)
-              onUpdateConfig("actorInputRaw", value);
-            }
-          }}
           placeholder='{"startUrls": [{"url": "https://example.com"}]}'
           rows={6}
-          value={
-            (config?.actorInputRaw as string) ||
-            (config?.actorInput
-              ? JSON.stringify(config.actorInput, null, 2)
-              : "")
-          }
+          onChange={(value) => onUpdateConfig("actorInput", value)}
+          value={(config?.actorInput as string) || ""}
         />
         <p className="text-muted-foreground text-xs">
           JSON input for the Actor. Check the Actor's documentation for required

@@ -18,7 +18,7 @@ export function RunActorConfigFields({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="actorId">Actor ID or Name</Label>
+        <Label htmlFor="actorId">Actor (ID or name)</Label>
         <TemplateBadgeInput
           disabled={disabled}
           id="actorId"
@@ -35,26 +35,12 @@ export function RunActorConfigFields({
       <div className="space-y-2">
         <Label htmlFor="actorInput">Actor Input (JSON)</Label>
         <TemplateBadgeTextarea
-          disabled={disabled}
-          id="actorInput"
-          onChange={(value) => {
-            try {
-              const parsed = JSON.parse(value);
-              onUpdateConfig("actorInput", parsed);
-              onUpdateConfig("actorInputRaw", value);
-            } catch {
-              // Store as string if not valid JSON yet (user is still typing)
-              onUpdateConfig("actorInputRaw", value);
-            }
-          }}
-          placeholder='{"startUrls": [{"url": "https://example.com"}]}'
-          rows={6}
-          value={
-            (config?.actorInputRaw as string) ||
-            (config?.actorInput
-              ? JSON.stringify(config.actorInput, null, 2)
-              : "")
-          }
+            disabled={disabled}
+            id="actorInput"
+            placeholder='{"startUrls": [{"url": "https://example.com"}]}'
+            rows={6}
+            onChange={(value) => onUpdateConfig("actorInput", value)}
+            value={(config?.actorInput as string) || ""}
         />
         <p className="text-muted-foreground text-xs">
           JSON input for the Actor. Check the Actor's documentation for required
