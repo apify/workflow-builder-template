@@ -241,39 +241,6 @@ async function executeActionStep(input: {
     };
   }
 
-  if (actionType === "Run Apify Actor") {
-    const { apifyRunActorStep } = await import(
-      "../plugins/apify/steps/run-actor/step"
-    );
-    const runActorInput = { ...stepInput };
-    if (typeof runActorInput.actorInput === "string") {
-      try {
-        runActorInput.actorInput = JSON.parse(runActorInput.actorInput);
-      } catch {
-        // If JSON parsing fails, keep the original string
-        console.warn("[Run Apify Actor] Failed to parse actorInput as JSON");
-      }
-    }
-    console.log(
-      "[Run Apify Actor] Input:",
-      JSON.stringify(runActorInput, null, 2)
-    );
-    // biome-ignore lint/suspicious/noExplicitAny: Dynamic step input type
-    return await apifyRunActorStep(runActorInput as any);
-  }
-
-  if (actionType === "Scrape Single URL") {
-    const { scrapeSingleUrlStep } = await import(
-      "../plugins/apify/steps/scrape-single-url/step"
-    );
-    console.log(
-      "[Scrape Single URL] Input:",
-      JSON.stringify(stepInput, null, 2)
-    );
-    // biome-ignore lint/suspicious/noExplicitAny: Dynamic step input type
-    return await scrapeSingleUrlStep(stepInput as any);
-  }
-
   // Fallback for unknown action types
   return {
     success: false,
