@@ -94,6 +94,7 @@ function decryptConfig(encryptedConfig: string): Record<string, unknown> {
     return {};
   }
 }
+
 export type DecryptedIntegration = {
   id: string;
   userId: string;

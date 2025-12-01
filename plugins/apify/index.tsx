@@ -83,7 +83,7 @@ const apifyPlugin: IntegrationPlugin = {
           key: "crawlerType",
           label: "Crawler Type",
           type: "select",
-          defaultValue: "playwright",
+          defaultValue: "playwright:adaptive",
           options: [
             {
               value: "playwright:adaptive",

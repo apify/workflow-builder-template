@@ -19,7 +19,6 @@ import {
   getAllIntegrations,
 } from "@/plugins";
 import { ActionConfigRenderer } from "./action-config-renderer";
-
 import { SchemaBuilder, type SchemaField } from "./schema-builder";
 
 type ActionConfigProps = {

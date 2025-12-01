@@ -18,6 +18,7 @@ import "server-only";
 import { getCredentialMapping, getIntegration } from "@/plugins";
 import { getIntegrationById } from "./db/integrations";
 import type { IntegrationConfig, IntegrationType } from "./types/integration";
+
 // WorkflowCredentials is now a generic record since plugins define their own keys
 export type WorkflowCredentials = Record<string, string | undefined>;
 
