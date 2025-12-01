@@ -11,10 +11,16 @@ export async function apifyRunActorStep(input: {
 }) {
   "use step";
 
-  const apiKey = process.env.APIFY_API_KEY!;
-  const client = new ApifyClient({ token: apiKey });
-  const actorClient = client.actor(input.actorId);
-  const maxWaitSecs = 120;
+  const apiKey = process.env.APIFY_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Apify API Token is not configured. Set APIFY_API_KEY environment variable.");
+  }
+
+  try {
+    const client = new ApifyClient({ token: apiKey });
+    const actorClient = client.actor(input.actorId);
+    const maxWaitSecs = 120;
 
     // Run synchronously and wait for completion
     const runData = await actorClient.call(input.actorInput || {}, {
@@ -36,4 +42,7 @@ export async function apifyRunActorStep(input: {
       datasetId: runData.defaultDatasetId,
       data,
     };
+  } catch (error) {
+    throw new Error(\`Failed to run Actor: \${error instanceof Error ? error.message : String(error)}\`);
+  }
 }`;
