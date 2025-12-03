@@ -7,7 +7,7 @@ export const runActorCodegenTemplate = `import { ApifyClient } from "apify-clien
 
 export async function apifyRunActorStep(input: {
   actorId: string;
-  actorInput?: string;
+  actorInput?: string | Record<string, unknown> | null;
 }) {
   "use step";
 
@@ -19,10 +19,16 @@ export async function apifyRunActorStep(input: {
 
   let parsedActorInput: Record<string, unknown> = {};
   if (input.actorInput) {
-    try {
-      parsedActorInput = JSON.parse(input.actorInput);
-    } catch (err) {
-      throw new Error(\`Cannot parse Actor input: \${err instanceof Error ? err.message : String(err)}\`);
+    // If it's already an object, use it directly
+    if (typeof input.actorInput === "object" && !Array.isArray(input.actorInput)) {
+      parsedActorInput = input.actorInput;
+    } else if (typeof input.actorInput === "string") {
+      // If it's a string, parse it
+      try {
+        parsedActorInput = JSON.parse(input.actorInput);
+      } catch (err) {
+        throw new Error(\`Cannot parse Actor input: \${err instanceof Error ? err.message : String(err)}\`);
+      }
     }
   }
 

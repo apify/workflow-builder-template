@@ -23,7 +23,7 @@ export async function apifyRunActorStep(
   input: {
     integrationId?: string;
     actorId: string;
-    actorInput?: string;
+    actorInput?: string | Record<string, unknown> | null;
   } & StepInput
 ): Promise<ApifyRunActorResult> {
   "use step";
@@ -42,16 +42,22 @@ export async function apifyRunActorStep(
       };
     }
 
-    let parsedActorInput = {};
+    let parsedActorInput: Record<string, unknown> = {};
     if (input?.actorInput) {
+      // If it's already an object, use it directly
+      if (typeof input.actorInput === "object" && !Array.isArray(input.actorInput)) {
+        parsedActorInput = input.actorInput;
+      } else if (typeof input.actorInput === "string") {
+        // If it's a string, parse it
         try {
-            parsedActorInput = JSON.parse(input?.actorInput);
+          parsedActorInput = JSON.parse(input.actorInput);
         } catch (err) {
-            return {
-                success: false,
-                error: `Cannot parse Actor input: ${getErrorMessage(err)}`,
-            };
+          return {
+            success: false,
+            error: `Cannot parse Actor input: ${getErrorMessage(err)}`,
+          };
         }
+      }
     }
 
     try {
