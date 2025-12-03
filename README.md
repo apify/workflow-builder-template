@@ -263,6 +263,30 @@ const searchResult = await firecrawlSearchStep({
 });
 ```
 
+### Apify (Web Scraping)
+
+```typescript
+import {
+  scrapeSingleUrlStep,
+  apifyRunActorStep,
+} from "@/lib/steps/apify";
+
+// Scrape a URL
+const scrapeResult = await scrapeSingleUrlStep({
+  url: "https://example.com",
+  crawlerType: "playwright:adaptive",
+});
+
+// Run an Actor from Apify Store
+const searchMapsResults = await apifyRunActorStep({
+  actorId: "compass/crawler-google-places",
+  actorInput: {
+      searchStringsArray: [ "restaurants in San Francisco" ]
+  },
+});
+```
+
+
 ## Tech Stack
 
 - **Framework**: Next.js 16 with React 19
