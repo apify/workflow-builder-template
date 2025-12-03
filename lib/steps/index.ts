@@ -66,7 +66,7 @@ export const stepRegistry: Record<string, StepFunction> = {
     (await import("../../plugins/firecrawl/steps/search")).firecrawlSearchStep(
       input as Parameters<typeof firecrawlSearchStep>[0]
     ),
-  "Run Apify Actor": async (input) =>
+  "Run Actor": async (input) =>
     (
       await import("../../plugins/apify/steps/run-actor/step")
     ).apifyRunActorStep(input as Parameters<typeof apifyRunActorStep>[0]),

@@ -3,7 +3,7 @@ import { TemplateBadgeInput } from "@/components/ui/template-badge-input";
 import { TemplateBadgeJson } from "@/components/ui/template-badge-json";
 
 /**
- * Run Apify Actor Config Fields Component
+ * Run Actor Config Fields Component
  * UI for configuring the run actor action
  */
 export function RunActorConfigFields({

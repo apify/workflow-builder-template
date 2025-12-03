@@ -70,7 +70,7 @@ export async function POST(
         );
         break;
       case "apify":
-        result = await testApifyConnection(integration.config.apifyApiKey);
+        result = await testApifyConnection(integration.config.apifyApiToken);
         break;
       default:
         return NextResponse.json(

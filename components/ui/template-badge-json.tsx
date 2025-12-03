@@ -45,6 +45,12 @@ export function TemplateBadgeJson({
       return;
     }
 
+    // Ensure that parsable values (not object) throws
+    if (!/^\s*\{[\s\S]*\}\s*$/.test(value)) {
+      setJsonError("Value must be a JSON object");
+      return;
+    }
+
     // Parse JSON directly - template variables will be treated as normal strings
     try {
       JSON.parse(value);

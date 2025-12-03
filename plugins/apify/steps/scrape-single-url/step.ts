@@ -32,7 +32,7 @@ export async function scrapeSingleUrlStep(
       ? await fetchCredentials(input.integrationId)
       : {};
 
-    const apiKey = credentials.APIFY_API_KEY;
+    const apiKey = credentials.APIFY_API_TOKEN;
 
     if (!apiKey) {
       return {
@@ -69,11 +69,6 @@ export async function scrapeSingleUrlStep(
 
       // Run synchronously and wait for completion (waits indefinitely if waitSecs not specified)
       const runData = await actorClient.call(actorInput);
-      console.log("[Scrape Single URL] Actor call completed:", {
-        runId: runData.id,
-        status: runData.status,
-        hasDataset: !!runData.defaultDatasetId,
-      });
 
       // Get dataset items
       let markdown: string | undefined;

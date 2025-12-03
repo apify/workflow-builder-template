@@ -1,5 +1,5 @@
 /**
- * Code generation template for Run Apify Actor action
+ * Code generation template for Run Actor action
  * This template is used when exporting workflows to standalone Next.js projects
  * It uses environment variables instead of integrationId
  */
@@ -11,10 +11,10 @@ export async function apifyRunActorStep(input: {
 }) {
   "use step";
 
-  const apiKey = process.env.APIFY_API_KEY;
+  const apiKey = process.env.APIFY_API_TOKEN;
 
   if (!apiKey) {
-    throw new Error("Apify API Token is not configured. Set APIFY_API_KEY environment variable.");
+    throw new Error("Apify API Token is not configured. Set APIFY_API_TOKEN environment variable.");
   }
 
   let parsedActorInput: Record<string, unknown> = {};
@@ -46,7 +46,7 @@ export async function apifyRunActorStep(input: {
       runId: runData.id || "unknown",
       status: runData.status || "SUCCEEDED",
       datasetId: runData.defaultDatasetId,
-      datasetItems,
+      data: datasetItems,
     };
   } catch (error) {
     throw new Error(\`Failed to run Actor: \${error instanceof Error ? error.message : String(error)}\`);

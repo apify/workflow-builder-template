@@ -122,7 +122,7 @@ export const PLUGIN_STEP_IMPORTERS: Record<string, StepImporter> = {
 export const ACTION_LABELS: Record<string, string> = {
   "ai-gateway/generate-text": "Generate Text",
   "ai-gateway/generate-image": "Generate Image",
-  "apify/run-actor": "Run Apify Actor",
+  "apify/run-actor": "Run Actor",
   "apify/scrape-single-url": "Scrape Single URL",
   "firecrawl/scrape": "Scrape URL",
   "firecrawl/search": "Search Web",

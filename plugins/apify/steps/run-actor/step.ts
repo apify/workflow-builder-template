@@ -16,7 +16,7 @@ type ApifyRunActorResult =
   | { success: false; error: string };
 
 /**
- * Run Apify Actor Step
+ * Run Actor Step
  * Runs an Apify Actor and optionally waits for results
  */
 export async function apifyRunActorStep(
@@ -33,7 +33,7 @@ export async function apifyRunActorStep(
       ? await fetchCredentials(input.integrationId)
       : {};
 
-    const apiKey = credentials.APIFY_API_KEY;
+    const apiKey = credentials.APIFY_API_TOKEN;
 
     if (!apiKey) {
       return {
@@ -75,7 +75,7 @@ export async function apifyRunActorStep(
         runId: runData.id || "unknown",
         status: runData.status || "SUCCEEDED",
         datasetId: runData.defaultDatasetId,
-        datasetItems,
+        data: datasetItems,
       };
     } catch (error) {
       return {

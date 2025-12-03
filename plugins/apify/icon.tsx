@@ -2,7 +2,7 @@ import Image from "next/image";
 
 /**
  * Apify Icon Component
- * Used as the icon for Run Apify Actor action
+ * Used as the icon for Run Actor action
  */
 export function ApifyIcon({ className }: { className?: string }) {
   return (

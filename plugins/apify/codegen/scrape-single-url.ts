@@ -11,10 +11,10 @@ export async function scrapeSingleUrlStep(input: {
 }) {
   "use step";
 
-  const apiKey = process.env.APIFY_API_KEY;
+  const apiKey = process.env.APIFY_API_TOKEN;
 
   if (!apiKey) {
-    throw new Error("Apify API Token is not configured. Set APIFY_API_KEY environment variable.");
+    throw new Error("Apify API Token is not configured. Set APIFY_API_TOKEN environment variable.");
   }
 
   if (!input.url) {

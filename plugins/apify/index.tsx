@@ -13,12 +13,12 @@ const apifyPlugin: IntegrationPlugin = {
 
   formFields: [
     {
-      id: "apifyApiKey",
-      label: "API Token",
+      id: "apifyApiToken",
+      label: "Apify API Token",
       type: "password",
       placeholder: "apify_api_...",
-      configKey: "apifyApiKey",
-      envVar: "APIFY_API_KEY",
+      configKey: "apifyApiToken",
+      envVar: "APIFY_API_TOKEN",
       helpText: "Get your API token from ",
       helpLink: {
         text: "Apify Console",
@@ -37,7 +37,7 @@ const apifyPlugin: IntegrationPlugin = {
   actions: [
     {
       slug: "run-actor",
-      label: "Run Apify Actor",
+      label: "Run Actor",
       description: "Run an Apify Actor and get results",
       category: "Apify",
       stepFunction: "apifyRunActorStep",
@@ -47,8 +47,8 @@ const apifyPlugin: IntegrationPlugin = {
           key: "actorId",
           label: "Actor (ID or name)",
           type: "template-input",
-          placeholder: "apify/web-scraper or {{NodeName.actorId}}",
-          example: "apify/web-scraper",
+          placeholder: "apify/website-content-crawler or {{NodeName.actorId}}",
+          example: "apify/website-content-crawler",
           required: true,
         },
         {
