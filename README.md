@@ -272,10 +272,8 @@ const searchResult = await firecrawlSearchStep({
 ### Apify (Web Scraping)
 
 ```typescript
-import {
-  scrapeSingleUrlStep,
-  apifyRunActorStep,
-} from "@/lib/steps/apify";
+import { apifyRunActorStep } from "@/lib/apify/steps/run-actor/step";
+import { scrapeSingleUrlStep } from "@/lib/apify/steps/scrape-single-url/step";
 
 // Scrape a URL
 const scrapeResult = await scrapeSingleUrlStep({
