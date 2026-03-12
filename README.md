@@ -82,6 +82,7 @@ Visit [http://localhost:3000](http://localhost:3000) to get started.
 - **AI Gateway**: Generate Text, Generate Image
 - **Apify**: Run Actor, Scrape Single URL
 - **Blob**: Put Blob, List Blobs
+- **Clerk**: Get User, Create User, Update User, Delete User
 - **fal.ai**: Generate Image, Generate Video, Upscale Image, Remove Background, Image to Image
 - **Firecrawl**: Scrape URL, Search Web
 - **GitHub**: Create Issue, List Issues, Get Issue, Update Issue
@@ -92,6 +93,7 @@ Visit [http://localhost:3000](http://localhost:3000) to get started.
 - **Stripe**: Create Customer, Get Customer, Create Invoice
 - **Superagent**: Guard, Redact
 - **v0**: Create Chat, Send Message
+- **Webflow**: List Sites, Get Site, Publish Site
 <!-- PLUGINS:END -->
 
 ## Code Generation

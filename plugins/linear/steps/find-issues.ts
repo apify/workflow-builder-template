@@ -19,7 +19,9 @@ type IssuesQueryResponse = {
       title: string;
       url: string;
       priority: number;
-      assigneeId?: string;
+      assignee?: {
+        id: string;
+      };
       state: {
         name: string;
       } | null;
@@ -37,8 +39,8 @@ type LinearIssue = {
 };
 
 type FindIssuesResult =
-  | { success: true; issues: LinearIssue[]; count: number }
-  | { success: false; error: string };
+  | { success: true; data: { issues: LinearIssue[]; count: number } }
+  | { success: false; error: { message: string } };
 
 export type FindIssuesCoreInput = {
   linearAssigneeId?: string;
@@ -85,8 +87,10 @@ async function stepHandler(
   if (!apiKey) {
     return {
       success: false,
-      error:
-        "LINEAR_API_KEY is not configured. Please add it in Project Integrations.",
+      error: {
+        message:
+          "LINEAR_API_KEY is not configured. Please add it in Project Integrations.",
+      },
     };
   }
 
@@ -119,7 +123,9 @@ async function stepHandler(
             title
             url
             priority
-            assigneeId
+            assignee {
+              id
+            }
             state {
               name
             }
@@ -132,7 +138,7 @@ async function stepHandler(
     if (result.errors?.length) {
       return {
         success: false,
-        error: result.errors[0].message,
+        error: { message: result.errors[0].message },
       };
     }
 
@@ -143,19 +149,21 @@ async function stepHandler(
         url: issue.url,
         state: issue.state?.name || "Unknown",
         priority: issue.priority,
-        assigneeId: issue.assigneeId || undefined,
+        assigneeId: issue.assignee?.id || undefined,
       })
     );
 
     return {
       success: true,
-      issues: mappedIssues,
-      count: mappedIssues.length,
+      data: {
+        issues: mappedIssues,
+        count: mappedIssues.length,
+      },
     };
   } catch (error) {
     return {
       success: false,
-      error: `Failed to find issues: ${getErrorMessage(error)}`,
+      error: { message: `Failed to find issues: ${getErrorMessage(error)}` },
     };
   }
 }
